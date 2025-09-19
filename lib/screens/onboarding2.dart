@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class OnboardingScreen1 extends StatelessWidget {
+class OnboardingScreen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +30,11 @@ class OnboardingScreen1 extends StatelessWidget {
                   child: Text("Back"),
                 ),
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/onboarding2'),
+                  onPressed: () => Navigator.pushNamed(context, '/onboarding3'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                   ),
-                  child: Text("Next"),
+                  child: Text("Next", style: TextStyle(color: Colors.white)),
                 ),
               ],
             )

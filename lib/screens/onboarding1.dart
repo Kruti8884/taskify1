@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class OnboardingScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,13 +25,13 @@ class WelcomeScreen extends StatelessWidget {
             Spacer(),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/onboarding1');
+                Navigator.pushNamed(context, '/onboarding2');
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 backgroundColor: Colors.black,
               ),
-              child: Text("Get Started"),
+              child: Text("Get Started", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

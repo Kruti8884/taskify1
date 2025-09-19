@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +39,14 @@ class SignUpScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _isLoading ? null : _signUp,
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 backgroundColor: Colors.black,
               ),
-              child: Text("Sign Up"),
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text("Sign Up", style: TextStyle(color: Colors.white)),
             ),
             SizedBox(height: 10),
             GestureDetector(
@@ -48,5 +57,34 @@ class SignUpScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signUp() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty || nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill in all fields.")),
+      );
+      return;
+    }
+    setState(() => _isLoading = true);
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // Update user's display name
+      await userCredential.user?.updateDisplayName(nameController.text.trim());
+
+      // The AuthWrapper will handle navigation to the home screen.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Sign up successful! Welcome!")),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? "Sign up failed.")));
+    }
+    if (mounted) setState(() => _isLoading = false);
   }
 }
